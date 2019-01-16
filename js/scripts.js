@@ -85,7 +85,7 @@ $(document).ready(function () {
         };
     });
 
-    $("#terrainsClassesIndigenes").click(function () {
+    $("#terrainIndigene").click(function () {
         if ($(this).hasClass("btn-warning")) {
             $(this).removeClass("btn-warning");
             $(this).addClass("btn-secondary");

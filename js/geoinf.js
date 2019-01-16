@@ -172,7 +172,7 @@ $(document).ready(function () {
         deforestation.setVisible(!deforestation.getVisible());
     });
 
-    $('#totalzoneDeforestee').click(function () {
+    $('#totalZoneDeforestee').click(function () {
         deforestation.setVisible(!deforestation.getVisible());
     });
 
