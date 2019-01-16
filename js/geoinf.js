@@ -1,9 +1,5 @@
 var url = "https://julien-beauverd.carto.com/api/v2/";
 var requeteDefAll = "select*from%20desm76";
-var requeteDef71a76 = "";
-var requeteDef7787 = "";
-var requeteDef88a91 = "";
-var requeteDef92a00 = "";
 var requeteZone = "select*from%20bresil_zone_protected_simplifier";
 var format = "geojson";
 var apiKey = "c9219f2fee613c8bf58a861a523d8493519f5f57";
@@ -60,6 +56,21 @@ $(document).ready(function () {
         })
     });
     map.addLayer(desm76);
+
+    var selectInteraction = new ol.interaction.Select({
+        condition: ol.events.condition.singleClick,
+        // the interactive layers on which the selection is possible (they may be more than one)
+        layers: [desm76, zoneProtected]
+    });
+    map.addInteraction(selectInteraction);
+
+    // add a listener to fire when one or more feature from the interactive layer(s) is(are) selected
+    selectInteraction.on('select', function (e) {
+        if(e.selected.length > 0) {
+            var title = e.selected[0].get("title");
+            $("#info").html(title);
+        }
+    });
 
     $('#zoneProtegee').click(function(){
         zoneProtected.setVisible(!zoneProtected.getVisible());
