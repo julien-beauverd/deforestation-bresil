@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <title>ol3 - Ex6a - GeoJSON vector overlay</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script type="text/javascript" src="js/config.js"></script>
+    <meta charset="utf-8" />
+    <script type="text/javascript">
+        var map;
+        $(document).ready(function () {
+            map = new ol.Map({
+                view: new ol.View({
+                    center: [-6800000, -3200000],
+                    zoom: 3.4
+                }),
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ]
+            });
+            var desm76 = new ol.layer.Vector({
+                title: 'deforestation',
+                visible: true,
+                style: new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: [255, 255, 255, 0]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: '#4C4CFF',
+                        width: 5
+                    })
+                }),
+                source: new ol.source.Vector({
+                    url: "https://julien-beauverd.carto.com/api/v2/sql?q=select*from%20desm76&format=geojson&api_key=c9219f2fee613c8bf58a861a523d8493519f5f57",
+                    format: new ol.format.GeoJSON()
+                })
+            });
+            map.addLayer(desm76);
+        });
+
+    </script>
+</head>
+
+<body>
+    <div id="application">
+        <div id="carte">
+            <div id="map"></div>
+            <div class="slidecontainer">
+                <input type="range" min="1" max="4" value="4" class="slider" id="myRange">
+                <div class="annee">
+                    <p>1971 à 1976</p>
+                    <p>1977 à 1987</p>
+                    <p>1988 à 1991</p>
+                    <p>1992 à 2000</p>
+                </div>
+            </div>
+        </div>
+        <div id="information">
+            <h1>Projet Géoinf</h1>
+            <h2>Déforestation Brésil</h2>
+            <p>Déforestation totale de <span id="demo"></span> : <span id="annuel">chiffre</span></p>
+            <p>Déforestation de 2005 à <span id="demo"></span>:<span id="depuisCinq">chiffre</span></p>
+        </div>
+    </div>
+</body>
+
+</html>

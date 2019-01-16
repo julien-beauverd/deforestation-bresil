@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+
+  <!-- 
+    SLD spec documentation: http://portal.opengeospatial.org/files/?artifact_id=22364
+    Howto SLD user guide: http://wiki.deegree.org/deegreeWiki/HowToUseWMSGetMapRequestsWithSLD
+  -->
+
+  <NamedLayer>
+    <Name>ogo:cities</Name>
+    <UserStyle>
+      <Name>capitals</Name>
+      <Title>Capital cities</Title>
+      <FeatureTypeStyle>
+        <Rule>
+          <Title>Capitals</Title>
+          <Filter xmlns="http://www.opengis.net/ogc">
+            <PropertyIsEqualTo>
+              <PropertyName>capit_1_0</PropertyName>
+              <Literal>1</Literal>
+            </PropertyIsEqualTo>
+          </Filter>
+          <PointSymbolizer>
+            <Graphic>
+              <Mark>
+                <WellKnownName>circle</WellKnownName>
+                <Fill>
+                  <CssParameter name="fill">#FFFFFF</CssParameter>
+                </Fill>
+                <Stroke>
+                  <CssParameter name="stroke">#000000</CssParameter>
+                  <CssParameter name="stroke-width">2</CssParameter>
+                </Stroke>
+              </Mark>
+              <Opacity>1.0</Opacity>
+              <Size>6</Size>
+            </Graphic>
+          </PointSymbolizer>
+          <TextSymbolizer>
+            <Label>
+              <PropertyName xmlns="http://www.opengis.net/ogc">wup_capit</PropertyName>
+            </Label>
+            <Font>
+              <CssParameter name="font-family">Arial</CssParameter>
+              <CssParameter name="font-weight">Bold</CssParameter>
+              <CssParameter name="font-size">14</CssParameter>
+            </Font>
+            <LabelPlacement>
+              <PointPlacement>
+                <AnchorPoint>
+                  <AnchorPointX>0.5</AnchorPointX>
+                  <AnchorPointY>0.5</AnchorPointY>
+                </AnchorPoint>
+                <Displacement>
+                  <DisplacementX>0</DisplacementX>
+                  <DisplacementY>-15</DisplacementY>
+                </Displacement>
+              </PointPlacement>
+            </LabelPlacement>
+            <Halo>
+              <Radius>2</Radius>
+              <Fill>
+                <CssParameter name="fill">#FFFFFF</CssParameter>
+              </Fill>
+            </Halo>
+            <Fill>
+              <CssParameter name="fill">#000000</CssParameter>
+            </Fill>
+          </TextSymbolizer>
+        </Rule>
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
