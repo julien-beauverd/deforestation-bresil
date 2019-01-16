@@ -3,44 +3,13 @@
 <head>
     <title>ol3 - Ex6a - GeoJSON vector overlay</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script type="text/javascript" src="js/config.js"></script>
+    <link rel="stylesheet" href="https://openlayers.org/en/v3.20.1/css/ol.css" type="text/css">
+    <script type="text/javascript" src="https://openlayers.org/en/v3.20.1/build/ol-debug.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+    <script type="text/javascript" src="js/geoinf.js"></script>
+    
     <meta charset="utf-8" />
-    <script type="text/javascript">
-        var map;
-        $(document).ready(function () {
-            map = new ol.Map({
-                view: new ol.View({
-                    center: [-6800000, -3200000],
-                    zoom: 3.4
-                }),
-                target: 'map',
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    })
-                ]
-            });
-            var desm76 = new ol.layer.Vector({
-                title: 'deforestation',
-                visible: true,
-                style: new ol.style.Style({
-                    fill: new ol.style.Fill({
-                        color: [255, 255, 255, 0]
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: '#4C4CFF',
-                        width: 5
-                    })
-                }),
-                source: new ol.source.Vector({
-                    url: "https://julien-beauverd.carto.com/api/v2/sql?q=select*from%20desm76&format=geojson&api_key=c9219f2fee613c8bf58a861a523d8493519f5f57",
-                    format: new ol.format.GeoJSON()
-                })
-            });
-            map.addLayer(desm76);
-        });
-
-    </script>
 </head>
 
 <body>
