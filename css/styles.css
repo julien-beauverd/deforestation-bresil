@@ -1,29 +1,14 @@
-#map {
-    width: 100%;
-    height: 90%;
-    margin-left: 0px;
-    margin-bottom: 0px;
+html{
+    padding: 20 20 20 20;
+}
+
+#map{
+    height: 40em;
 }
 
 .slidecontainer {
     width: 100%;
   }
-
-#application{
-    width: 100%;
-    height: 100%;
-    display:flex;
-}
-
-#information{
-    width: 50%;
-    margin: 30 30 30 30;
-}
-#carte{
-    width: 50%;
-    height: 95%;
-    margin: 10 30 30 30;
-}
 
 .annee{
     display: flex;

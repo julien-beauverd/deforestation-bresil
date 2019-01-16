@@ -1,20 +1,22 @@
 <html>
 
 <head>
-    <title>ol3 - Ex6a - GeoJSON vector overlay</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Deforestation GeoInf</title>
     <link rel="stylesheet" href="https://openlayers.org/en/v3.20.1/css/ol.css" type="text/css">
     <script type="text/javascript" src="https://openlayers.org/en/v3.20.1/build/ol-debug.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/scripts.js"></script>
     <script type="text/javascript" src="js/geoinf.js"></script>
-    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+        integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+
     <meta charset="utf-8" />
 </head>
 
 <body>
-    <div id="application">
-        <div id="carte">
+    <div class="row">
+        <div class="col-md-8">
             <div id="map"></div>
             <div class="slidecontainer">
                 <input type="range" min="1" max="4" value="4" class="slider" id="myRange">
@@ -26,12 +28,15 @@
                 </div>
             </div>
         </div>
-        <div id="information">
+        <div class="col-md-4">
             <h1>Projet Géoinf</h1>
             <h2>Déforestation Brésil</h2>
             <p>Déforestation totale de <span id="demo"></span> : <span id="annuel">chiffre</span></p>
+            <div id="boutons">
+                <button id="zoneProtegee" type="button" class="btn btn-secondary">Zones protégées</button>
+                <button id="zoneDeforestee" type="button" class="btn btn-secondary">Zones déforestée</button>
+            </div>
         </div>
     </div>
 </body>
-
 </html>
