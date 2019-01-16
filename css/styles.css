@@ -6,6 +6,11 @@ html{
     height: 40em;
 }
 
+.btn{
+  width: 100%;
+  margin: 10 0 10 0;
+}
+
 .slidecontainer {
     width: 100%;
   }

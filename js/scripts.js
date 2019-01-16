@@ -54,5 +54,45 @@ $(document).ready(function () {
             $(this).addClass("btn-danger");
         };
     });
+
+    $("#totalZoneDeforestee").click(function () {
+        if ($(this).hasClass("btn-danger")) {
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-danger");
+        };
+    });
+
+    $("#carteBresil").click(function () {
+        if ($(this).hasClass("btn-info")) {
+            $(this).removeClass("btn-info");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-info");
+        };
+    });
+
+    $("#frontiereMaritime").click(function () {
+        if ($(this).hasClass("btn-primary")) {
+            $(this).removeClass("btn-primary");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-primary");
+        };
+    });
+
+    $("#terrainsClassesIndigenes").click(function () {
+        if ($(this).hasClass("btn-warning")) {
+            $(this).removeClass("btn-warning");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-warning");
+        };
+    });
 });
 
