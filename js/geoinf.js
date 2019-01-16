@@ -22,10 +22,10 @@ $(document).ready(function () {
             })
         ]
     });
-    
+
     var zoneProtected = new ol.layer.Vector({
         title: 'zone protégée',
-        visible: true,
+        visible: false,
         style: new ol.style.Style({
             fill: new ol.style.Fill({
                 color: '#28af03'
@@ -41,10 +41,10 @@ $(document).ready(function () {
         })
     });
     map.addLayer(zoneProtected);
-    
+
     var desm76 = new ol.layer.Vector({
         title: 'deforestation',
-        visible: true,
+        visible: false,
         style: new ol.style.Style({
             fill: new ol.style.Fill({
                 color: '#ce1414'
@@ -60,4 +60,12 @@ $(document).ready(function () {
         })
     });
     map.addLayer(desm76);
+
+    $('#zoneProtegee').click(function(){
+        zoneProtected.setVisible(!zoneProtected.getVisible());
+    });
+
+    $('#zoneDeforestee').click(function(){
+        desm76.setVisible(!desm76.getVisible());
+    });
 });

@@ -34,5 +34,25 @@ $(document).ready(function () {
         }
         output.innerHTML = annee;
     }
+
+    $("#zoneProtegee").click(function () {
+        if ($(this).hasClass("btn-success")) {
+            $(this).removeClass("btn-success");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-success");
+        };
+    });
+
+    $("#zoneDeforestee").click(function () {
+        if ($(this).hasClass("btn-danger")) {
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-danger");
+        };
+    });
 });
 
