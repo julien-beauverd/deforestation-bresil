@@ -67,7 +67,7 @@ $(document).ready(function () {
     // add a listener to fire when one or more feature from the interactive layer(s) is(are) selected
     selectInteraction.on('select', function (e) {
         if(e.selected.length > 0) {
-            var title = e.selected[0].get("title");
+            var title = e.selected[0].get("cartodb_id");
             $("#info").html(title);
         }
     });
