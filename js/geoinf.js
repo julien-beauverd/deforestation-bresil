@@ -1,3 +1,13 @@
+var url = "https://julien-beauverd.carto.com/api/v2/";
+var requeteDefAll = "select*from%20desm76";
+var requeteDef71a76 = "";
+var requeteDef7787 = "";
+var requeteDef88a91 = "";
+var requeteDef92a00 = "";
+var requeteZone = "select*from%20bresil_zone_protected_simplifier";
+var format = "geojson";
+var apiKey = "c9219f2fee613c8bf58a861a523d8493519f5f57";
+
 $(document).ready(function () {
     var map;
     map = new ol.Map({
@@ -12,20 +22,40 @@ $(document).ready(function () {
             })
         ]
     });
+    
+    var zoneProtected = new ol.layer.Vector({
+        title: 'zone protégée',
+        visible: true,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: '#28af03'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#28af03',
+                width: 1
+            })
+        }),
+        source: new ol.source.Vector({
+            url: url + "sql?q=" + requeteZone + "&format=" + format + "&api_key=" + apiKey,
+            format: new ol.format.GeoJSON()
+        })
+    });
+    map.addLayer(zoneProtected);
+    
     var desm76 = new ol.layer.Vector({
         title: 'deforestation',
         visible: true,
         style: new ol.style.Style({
             fill: new ol.style.Fill({
-                color: [255, 255, 255, 0]
+                color: '#ce1414'
             }),
             stroke: new ol.style.Stroke({
                 color: '#ce1414',
-                width: 2
+                width: 1
             })
         }),
         source: new ol.source.Vector({
-            url: "https://julien-beauverd.carto.com/api/v2/sql?q=select*from%20desm76&format=geojson&api_key=c9219f2fee613c8bf58a861a523d8493519f5f57",
+            url: url + "sql?q=" + requeteDefAll + "&format=" + format + "&api_key=" + apiKey,
             format: new ol.format.GeoJSON()
         })
     });
