@@ -13,7 +13,7 @@ var apiKey = "c9219f2fee613c8bf58a861a523d8493519f5f57";
 $(document).ready(function () {
 
     /*****************************************************************************
-     * map de l'application, utilisation de OpenStreetMap
+     * map de l'application, utilisation de OpenStreetMap et Bingmaps
      */
     var map;
     map = new ol.Map({
@@ -29,7 +29,8 @@ $(document).ready(function () {
             new ol.layer.Tile({
                 source: new ol.source.OSM()
             })
-        ]
+        ],
+        visible: false
     });
 
     var layerBingMaps = new ol.layer.Group({
@@ -40,10 +41,12 @@ $(document).ready(function () {
                     imagerySet: 'Road'
                 })
             })
-        ]
+        ],
+        visible: true
     });
 
-    map.setLayerGroup(layerBingMaps);
+    map.addLayer(layerBingMaps);
+    map.addLayer(layerOSM);
 
     /****************************************************************
      * Fonction qui crée la coueh
@@ -94,16 +97,23 @@ $(document).ready(function () {
      */
     var selectInteraction = new ol.interaction.Select({
         condition: ol.events.condition.singleClick,
-        // the interactive layers on which the selection is possible (they may be more than one)
         layers: [deforestation, zoneProtegee]
     });
+
     map.addInteraction(selectInteraction);
 
-    // add a listener to fire when one or more feature from the interactive layer(s) is(are) selected
     selectInteraction.on('select', function (e) {
-        if (e.selected.length > 0) {
-            var title = e.selected[0].get("cartodb_id");
-            $("#info").html(title);
+
+        if (typeof e.selected[0].get("area1") === 'undefined') {
+            $("#coucheInterrogee").append("Zone protégée");
+            $("#aire").append("aire de la zone : " + e.selected[0].get("gis_area"));
+
+        }
+        else {
+            $("#coucheInterrogee").append("Zone déforestée");
+            $("#aire").append("aire de la zone : " + e.selected[0].get("area1"));
+            $("#perimetre").append("périmètre de la zone : " + e.selected[0].get("perimete2"));
+
         }
     });
 
@@ -135,118 +145,126 @@ $(document).ready(function () {
     });
 
     $("#changementMap").click(function () {
+
         if ($(this).hasClass("btn-light")) {
 
-            map.setLayerGroup(layerOSM);
+            layerOSM.setVisible(!layerOSM.getVisible());
+            layerBingMaps.setVisible(!layerBingMaps.getVisible());
             $(this).removeClass("btn-light");
             $(this).addClass("btn-dark");
-            console.log("OSM");
         } else {
-            map.setLayerGroup(layerBingMaps);
+
+            layerOSM.setVisible(!layerOSM.getVisible());
+            layerBingMaps.setVisible(!layerBingMaps.getVisible());
             $(this).removeClass("btn-dark");
             $(this).addClass("btn-light");
-            console.log("bing");
         };
     });
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
 
-switch (output.innerHTML) {
-    case "1":
-        output.innerHTML = "1971 à 1976";
-        break;
-    case "2":
-        output.innerHTML = "1977 à 1987";
-        break;
-    case "3":
-        output.innerHTML = "1988 à 1991";
-        break;
-    default:
-        output.innerHTML = "1992 à 2000";
-}
-
-slider.oninput = function () {
-
-    annee = this.value;
-    switch (annee) {
+    switch (output.innerHTML) {
         case "1":
-            annee = "1971 à 1976";
+            output.innerHTML = "de 1971 à 1976";
             break;
         case "2":
-            annee = "1977 à 1987";
+            output.innerHTML = "de 1977 à 1987";
             break;
         case "3":
-            annee = "1988 à 1991";
+            output.innerHTML = "de 1988 à 1991";
+            break;
+        case "4":
+            output.innerHTML = "de 1992 à 2000";
             break;
         default:
-            annee = "1992 à 2000";
+            output.innerHTML = "";
     }
-    output.innerHTML = annee;
-}
 
-/***************************************
- * Changement de classes des boutons pour 
- * montrer si la couche est présente ou non
- */
+    slider.oninput = function () {
 
-$("#zoneProtegee").click(function () {
-    if ($(this).hasClass("btn-success")) {
-        $(this).removeClass("btn-success");
-        $(this).addClass("btn-secondary");
-    } else {
-        $(this).removeClass("btn-secondary");
-        $(this).addClass("btn-success");
-    };
-});
+        annee = this.value;
+        switch (annee) {
+            case "1":
+                annee = "de 1971 à 1976";
+                break;
+            case "2":
+                annee = "de 1977 à 1987";
+                break;
+            case "3":
+                annee = "de 1988 à 1991";
+                break;
+            case "4":
+                annee = "de 1992 à 2000";
+                break;
+            default:
+                annee = "";
+        }
+        output.innerHTML = annee;
+    }
 
-$("#zoneDeforestee").click(function () {
-    if ($(this).hasClass("btn-danger")) {
-        $(this).removeClass("btn-danger");
-        $(this).addClass("btn-secondary");
-    } else {
-        $(this).removeClass("btn-secondary");
-        $(this).addClass("btn-danger");
-    };
-});
+    /***************************************
+     * Changement de classes des boutons pour 
+     * montrer si la couche est présente ou non
+     */
 
-$("#totalZoneDeforestee").click(function () {
-    if ($(this).hasClass("btn-danger")) {
-        $(this).removeClass("btn-danger");
-        $(this).addClass("btn-secondary");
-    } else {
-        $(this).removeClass("btn-secondary");
-        $(this).addClass("btn-danger");
-    };
-});
+    $("#zoneProtegee").click(function () {
+        if ($(this).hasClass("btn-success")) {
+            $(this).removeClass("btn-success");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-success");
+        };
+    });
 
-$("#carteBresil").click(function () {
-    if ($(this).hasClass("btn-info")) {
-        $(this).removeClass("btn-info");
-        $(this).addClass("btn-secondary");
-    } else {
-        $(this).removeClass("btn-secondary");
-        $(this).addClass("btn-info");
-    };
-});
+    $("#zoneDeforestee").click(function () {
+        if ($(this).hasClass("btn-danger")) {
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-danger");
+        };
+    });
 
-$("#frontiereMaritime").click(function () {
-    if ($(this).hasClass("btn-primary")) {
-        $(this).removeClass("btn-primary");
-        $(this).addClass("btn-secondary");
-    } else {
-        $(this).removeClass("btn-secondary");
-        $(this).addClass("btn-primary");
-    };
-});
+    $("#totalZoneDeforestee").click(function () {
+        if ($(this).hasClass("btn-danger")) {
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-danger");
+        };
+    });
 
-$("#terrainIndigene").click(function () {
-    if ($(this).hasClass("btn-warning")) {
-        $(this).removeClass("btn-warning");
-        $(this).addClass("btn-secondary");
-    } else {
-        $(this).removeClass("btn-secondary");
-        $(this).addClass("btn-warning");
-    };
-});
+    $("#carteBresil").click(function () {
+        if ($(this).hasClass("btn-info")) {
+            $(this).removeClass("btn-info");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-info");
+        };
+    });
+
+    $("#frontiereMaritime").click(function () {
+        if ($(this).hasClass("btn-primary")) {
+            $(this).removeClass("btn-primary");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-primary");
+        };
+    });
+
+    $("#terrainIndigene").click(function () {
+        if ($(this).hasClass("btn-warning")) {
+            $(this).removeClass("btn-warning");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-warning");
+        };
+    });
 });
