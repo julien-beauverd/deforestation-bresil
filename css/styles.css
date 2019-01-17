@@ -2,13 +2,46 @@ html{
     padding: 20 20 20 20;
 }
 
+h1{
+  font-size: 1.7em;
+}
+
+h2{
+  font-size: 1.4em;
+}
+
+h3{
+  font-size: 1.2em;
+}
+
+p, span, .btn{
+  font-size: 1.1em;
+}
+
+#info{
+  border: 1px solid #696; 
+  height: 20rem;
+  padding: 3px;
+text-align: left;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+-webkit-box-shadow: #666 0px 2px 3px;
+-moz-box-shadow: #666 0px 2px 3px;
+box-shadow: #666 0px 2px 3px;
+}
+
 #map{
-    height: 40em;
+    height: 40rem;
 }
 
 .btn{
   width: 100%;
   margin: 5 0 0 0;
+}
+
+#info span{
+  display: block;
 }
 
 .slidecontainer {

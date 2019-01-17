@@ -2,7 +2,11 @@
  * Variables définies pour intéragir avec les fichiers sur wwww.carto.com
  */
 var url = "https://julien-beauverd.carto.com/api/v2/";
-var requeteDeforestation = "select*from%20deforestation";
+var requeteDeforestationTotale = "select*from%20deforestation";
+var requeteDeforestation71a76 = "select*from%20deforestation%20where%20data_lev8='1971 a 1976'";
+var requeteDeforestation77a87 = "select*from%20deforestation%20where%20data_lev8='1977 a 1987'";
+var requeteDeforestation88a91 = "select*from%20deforestation%20where%20data_lev8='1988 a 1991'";
+var requeteDeforestation92a00 = "select*from%20deforestation%20where%20data_lev8%20is%20null";
 var requeteZoneProtegee = "select*from%20bresil_zone_protegee";
 var requeteCarteBresil = "select*from%20carte_bresil";
 var requeteFrontiereMaritime = "select*from%20frontiere_maritime";
@@ -90,14 +94,19 @@ $(document).ready(function () {
     var frontiereMaritime = creationCouche("frontières maritimes", "#0800ff", "#0800ff", 7, 0.7, url, requeteFrontiereMaritime, format, apiKey);
     var zoneProtegee = creationCouche("zone protégée", "#28af03", "#28af03", 1, 1, url, requeteZoneProtegee, format, apiKey);
     var terrainIndigene = creationCouche("terrains classés indigènes", "#e57309", "#e57309", 1, 1, url, requeteTerrainsClassesIndigenes, format, apiKey);
-    var deforestation = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation, format, apiKey);
+    var deforestationTotale = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestationTotale, format, apiKey);
+    var deforestation71a76 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation71a76, format, apiKey);
+    var deforestation77a87 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation77a87, format, apiKey);
+    var deforestation88a91 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation88a91, format, apiKey);
+    var deforestation92a00 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation92a00, format, apiKey);
+    deforestationTotale.setVisible(true);
 
     /*****************************************************************************
      * Interaction des différentes couches
      */
     var selectInteraction = new ol.interaction.Select({
         condition: ol.events.condition.singleClick,
-        layers: [deforestation, zoneProtegee]
+        layers: [deforestationTotale, deforestation71a76, deforestation77a87, deforestation88a91, deforestation92a00, zoneProtegee]
     });
 
     map.addInteraction(selectInteraction);
@@ -105,14 +114,20 @@ $(document).ready(function () {
     selectInteraction.on('select', function (e) {
 
         if (typeof e.selected[0].get("area1") === 'undefined') {
-            $("#coucheInterrogee").append("Zone protégée");
-            $("#aire").append("aire de la zone : " + e.selected[0].get("gis_area"));
+            document.getElementById("coucheInterrogee").innerHTML = "Zone protégée";
+            document.getElementById("aire").innerHTML = "aire de la zone : " + e.selected[0].get("gis_area") + " km<sup>2</sup>";
+            document.getElementById("perimetre").innerHTML = "";
+            document.getElementById("date").innerHTML = "";
+            document.getElementById("name").innerHTML = "nom de la zone : " + e.selected[0].get("name");
 
         }
         else {
-            $("#coucheInterrogee").append("Zone déforestée");
-            $("#aire").append("aire de la zone : " + e.selected[0].get("area1"));
-            $("#perimetre").append("périmètre de la zone : " + e.selected[0].get("perimete2"));
+            document.getElementById("coucheInterrogee").innerHTML = "Zone déforestée";
+            document.getElementById("aire").innerHTML = "aire de la zone : " + (e.selected[0].get("area1") / 1000000) + " km<sup>2</sup>";
+            document.getElementById("perimetre").innerHTML = "périmètre de la zone : " + (e.selected[0].get("perimete2") / 1000) + " km";
+            document.getElementById("name").innerHTML = "";
+            document.getElementById("date").innerHTML = "Période de la déforestation : " + e.selected[0].get("data_lev8");
+
 
         }
     });
@@ -125,11 +140,25 @@ $(document).ready(function () {
     });
 
     $('#zoneDeforestee').click(function () {
-        deforestation.setVisible(!deforestation.getVisible());
-    });
+        if (deforestationTotale.getVisible() == true 
+        || deforestation71a76.getVisible() == true 
+        || deforestation77a87.getVisible() == true
+        || deforestation88a91.getVisible() == true
+        || deforestation92a00.getVisible() == true) {
+            deforestationTotale.setVisible(false);
+            deforestation71a76.setVisible(false);
+            deforestation77a87.setVisible(false);
+            deforestation88a91.setVisible(false);
+            deforestation92a00.setVisible(false);
+        }
+        else {
+            deforestationTotale.setVisible(true);
+            deforestation71a76.setVisible(true);
+            deforestation77a87.setVisible(true);
+            deforestation88a91.setVisible(true);
+            deforestation92a00.setVisible(true);
+        }
 
-    $('#totalZoneDeforestee').click(function () {
-        deforestation.setVisible(!deforestation.getVisible());
     });
 
     $('#carteBresil').click(function () {
@@ -187,18 +216,53 @@ $(document).ready(function () {
         switch (annee) {
             case "1":
                 annee = "de 1971 à 1976";
+                deforestationTotale.setVisible(false);
+                deforestation71a76.setVisible(true);
+                deforestation77a87.setVisible(false);
+                deforestation88a91.setVisible(false);
+                deforestation92a00.setVisible(false);
+                $("#zoneDeforestee").removeClass("btn-secondary");
+                $("#zoneDeforestee").addClass("btn-danger");
                 break;
             case "2":
                 annee = "de 1977 à 1987";
+                deforestationTotale.setVisible(false);
+                deforestation71a76.setVisible(false);
+                deforestation77a87.setVisible(true);
+                deforestation88a91.setVisible(false);
+                deforestation92a00.setVisible(false);
+                $("#zoneDeforestee").removeClass("btn-secondary");
+                $("#zoneDeforestee").addClass("btn-danger");
                 break;
             case "3":
                 annee = "de 1988 à 1991";
+                deforestationTotale.setVisible(false);
+                deforestation71a76.setVisible(false);
+                deforestation77a87.setVisible(false);
+                deforestation88a91.setVisible(true);
+                deforestation92a00.setVisible(false);
+                $("#zoneDeforestee").removeClass("btn-secondary");
+                $("#zoneDeforestee").addClass("btn-danger");
                 break;
             case "4":
                 annee = "de 1992 à 2000";
+                deforestationTotale.setVisible(false);
+                deforestation71a76.setVisible(false);
+                deforestation77a87.setVisible(false);
+                deforestation88a91.setVisible(false);
+                deforestation92a00.setVisible(true);
+                $("#zoneDeforestee").removeClass("btn-secondary");
+                $("#zoneDeforestee").addClass("btn-danger");
                 break;
             default:
                 annee = "";
+                deforestationTotale.setVisible(true);
+                deforestation71a76.setVisible(false);
+                deforestation77a87.setVisible(false);
+                deforestation88a91.setVisible(false);
+                deforestation92a00.setVisible(false);
+                $("#zoneDeforestee").removeClass("btn-secondary");
+                $("#zoneDeforestee").addClass("btn-danger");
         }
         output.innerHTML = annee;
     }
