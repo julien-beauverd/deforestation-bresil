@@ -21,13 +21,29 @@ $(document).ready(function () {
             center: [-6800000, -3200000],
             zoom: 3.4
         }),
-        target: 'map',
+        target: 'map'
+    });
+
+    var layerOSM = new ol.layer.Group({
         layers: [
             new ol.layer.Tile({
                 source: new ol.source.OSM()
             })
         ]
     });
+
+    var layerBingMaps = new ol.layer.Group({
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.BingMaps({
+                    key: 'AqE05oJsq-bWa50FPOW2S0eQm9Oqqygc1VTi_WPhUIoKR_-jgA559CRbfndgWAIz',
+                    imagerySet: 'Road'
+                })
+            })
+        ]
+    });
+
+    map.setLayerGroup(layerBingMaps);
 
     /****************************************************************
      * Fonction qui crée la coueh
@@ -118,104 +134,119 @@ $(document).ready(function () {
         terrainIndigene.setVisible(!terrainIndigene.getVisible());
     });
 
-    var slider = document.getElementById("myRange");
-    var output = document.getElementById("demo");
+    $("#changementMap").click(function () {
+        if ($(this).hasClass("btn-light")) {
 
-    switch (output.innerHTML) {
+            map.setLayerGroup(layerOSM);
+            $(this).removeClass("btn-light");
+            $(this).addClass("btn-dark");
+            console.log("OSM");
+        } else {
+            map.setLayerGroup(layerBingMaps);
+            $(this).removeClass("btn-dark");
+            $(this).addClass("btn-light");
+            console.log("bing");
+        };
+    });
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+
+switch (output.innerHTML) {
+    case "1":
+        output.innerHTML = "1971 à 1976";
+        break;
+    case "2":
+        output.innerHTML = "1977 à 1987";
+        break;
+    case "3":
+        output.innerHTML = "1988 à 1991";
+        break;
+    default:
+        output.innerHTML = "1992 à 2000";
+}
+
+slider.oninput = function () {
+
+    annee = this.value;
+    switch (annee) {
         case "1":
-            output.innerHTML = "1971 à 1976";
+            annee = "1971 à 1976";
             break;
         case "2":
-            output.innerHTML = "1977 à 1987";
+            annee = "1977 à 1987";
             break;
         case "3":
-            output.innerHTML = "1988 à 1991";
+            annee = "1988 à 1991";
             break;
         default:
-            output.innerHTML = "1992 à 2000";
+            annee = "1992 à 2000";
     }
+    output.innerHTML = annee;
+}
 
-    slider.oninput = function () {
+/***************************************
+ * Changement de classes des boutons pour 
+ * montrer si la couche est présente ou non
+ */
 
-        annee = this.value;
-        switch (annee) {
-            case "1":
-                annee = "1971 à 1976";
-                break;
-            case "2":
-                annee = "1977 à 1987";
-                break;
-            case "3":
-                annee = "1988 à 1991";
-                break;
-            default:
-                annee = "1992 à 2000";
-        }
-        output.innerHTML = annee;
-    }
+$("#zoneProtegee").click(function () {
+    if ($(this).hasClass("btn-success")) {
+        $(this).removeClass("btn-success");
+        $(this).addClass("btn-secondary");
+    } else {
+        $(this).removeClass("btn-secondary");
+        $(this).addClass("btn-success");
+    };
+});
 
-    /***************************************
-     * Changement de classes des boutons pour 
-     * montrer si la couche est présente ou non
-     */
+$("#zoneDeforestee").click(function () {
+    if ($(this).hasClass("btn-danger")) {
+        $(this).removeClass("btn-danger");
+        $(this).addClass("btn-secondary");
+    } else {
+        $(this).removeClass("btn-secondary");
+        $(this).addClass("btn-danger");
+    };
+});
 
-    $("#zoneProtegee").click(function () {
-        if ($(this).hasClass("btn-success")) {
-            $(this).removeClass("btn-success");
-            $(this).addClass("btn-secondary");
-        } else {
-            $(this).removeClass("btn-secondary");
-            $(this).addClass("btn-success");
-        };
-    });
+$("#totalZoneDeforestee").click(function () {
+    if ($(this).hasClass("btn-danger")) {
+        $(this).removeClass("btn-danger");
+        $(this).addClass("btn-secondary");
+    } else {
+        $(this).removeClass("btn-secondary");
+        $(this).addClass("btn-danger");
+    };
+});
 
-    $("#zoneDeforestee").click(function () {
-        if ($(this).hasClass("btn-danger")) {
-            $(this).removeClass("btn-danger");
-            $(this).addClass("btn-secondary");
-        } else {
-            $(this).removeClass("btn-secondary");
-            $(this).addClass("btn-danger");
-        };
-    });
+$("#carteBresil").click(function () {
+    if ($(this).hasClass("btn-info")) {
+        $(this).removeClass("btn-info");
+        $(this).addClass("btn-secondary");
+    } else {
+        $(this).removeClass("btn-secondary");
+        $(this).addClass("btn-info");
+    };
+});
 
-    $("#totalZoneDeforestee").click(function () {
-        if ($(this).hasClass("btn-danger")) {
-            $(this).removeClass("btn-danger");
-            $(this).addClass("btn-secondary");
-        } else {
-            $(this).removeClass("btn-secondary");
-            $(this).addClass("btn-danger");
-        };
-    });
+$("#frontiereMaritime").click(function () {
+    if ($(this).hasClass("btn-primary")) {
+        $(this).removeClass("btn-primary");
+        $(this).addClass("btn-secondary");
+    } else {
+        $(this).removeClass("btn-secondary");
+        $(this).addClass("btn-primary");
+    };
+});
 
-    $("#carteBresil").click(function () {
-        if ($(this).hasClass("btn-info")) {
-            $(this).removeClass("btn-info");
-            $(this).addClass("btn-secondary");
-        } else {
-            $(this).removeClass("btn-secondary");
-            $(this).addClass("btn-info");
-        };
-    });
-
-    $("#frontiereMaritime").click(function () {
-        if ($(this).hasClass("btn-primary")) {
-            $(this).removeClass("btn-primary");
-            $(this).addClass("btn-secondary");
-        } else {
-            $(this).removeClass("btn-secondary");
-            $(this).addClass("btn-primary");
-        };
-    });
-
-    $("#terrainIndigene").click(function () {
-        if ($(this).hasClass("btn-warning")) {
-            $(this).removeClass("btn-warning");
-            $(this).addClass("btn-secondary");
-        } else {
-            $(this).removeClass("btn-secondary");
-            $(this).addClass("btn-warning");
-        };
-    });
+$("#terrainIndigene").click(function () {
+    if ($(this).hasClass("btn-warning")) {
+        $(this).removeClass("btn-warning");
+        $(this).addClass("btn-secondary");
+    } else {
+        $(this).removeClass("btn-secondary");
+        $(this).addClass("btn-warning");
+    };
+});
 });
