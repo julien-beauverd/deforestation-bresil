@@ -32,24 +32,29 @@ $(document).ready(function () {
     /*****************************************************************************
      * carte du pays
      */
-    var carteBresil = new ol.layer.Vector({
-        title: 'carte Brésil',
-        visible: false,
-        style: new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: '#c4c623'
+
+    function creationCouche(title, fillColor, strokeColor, strokeWidth, url, requete, format, apiKey) {
+        var couche = new ol.layer.Vector({
+            title: title,
+            visible: false,
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: fillColor
+                }),
+                stroke: new ol.style.Stroke({
+                    color: strokeColor,
+                    width: strokeWidth
+                })
             }),
-            stroke: new ol.style.Stroke({
-                color: '#c4c623',
-                width: 1
+            source: new ol.source.Vector({
+                url: url + "sql?q=" + requete + "&format=" + format + "&api_key=" + apiKey,
+                format: new ol.format.GeoJSON()
             })
-        }),
-        source: new ol.source.Vector({
-            url: url + "sql?q=" + requeteCarteBresil + "&format=" + format + "&api_key=" + apiKey,
-            format: new ol.format.GeoJSON()
-        })
-    });
-    map.addLayer(carteBresil);
+        });
+        map.addLayer(couche);
+        return couche;
+    }
+    var carteBresil = creationCouche("carte Brésil", "#c4c623", "#c4c623", 1, url, requeteCarteBresil, format, apiKey);
 
     /*****************************************************************************
      * carte des frontières maritimes
@@ -186,5 +191,106 @@ $(document).ready(function () {
 
     $('#terrainIndigene').click(function () {
         terrainIndigene.setVisible(!terrainIndigene.getVisible());
+    });
+
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+
+    switch (output.innerHTML) {
+        case "1":
+            output.innerHTML = "1971 à 1976";
+            break;
+        case "2":
+            output.innerHTML = "1977 à 1987";
+            break;
+        case "3":
+            output.innerHTML = "1988 à 1991";
+            break;
+        default:
+            output.innerHTML = "1992 à 2000";
+    }
+
+    slider.oninput = function () {
+
+        annee = this.value;
+        switch (annee) {
+            case "1":
+                annee = "1971 à 1976";
+                break;
+            case "2":
+                annee = "1977 à 1987";
+                break;
+            case "3":
+                annee = "1988 à 1991";
+                break;
+            default:
+                annee = "1992 à 2000";
+        }
+        output.innerHTML = annee;
+    }
+
+    /***************************************
+     * Changement de classes des boutons pour 
+     * montrer si la couche est présente ou non
+     */
+
+    $("#zoneProtegee").click(function () {
+        if ($(this).hasClass("btn-success")) {
+            $(this).removeClass("btn-success");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-success");
+        };
+    });
+
+    $("#zoneDeforestee").click(function () {
+        if ($(this).hasClass("btn-danger")) {
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-danger");
+        };
+    });
+
+    $("#totalZoneDeforestee").click(function () {
+        if ($(this).hasClass("btn-danger")) {
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-danger");
+        };
+    });
+
+    $("#carteBresil").click(function () {
+        if ($(this).hasClass("btn-info")) {
+            $(this).removeClass("btn-info");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-info");
+        };
+    });
+
+    $("#frontiereMaritime").click(function () {
+        if ($(this).hasClass("btn-primary")) {
+            $(this).removeClass("btn-primary");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-primary");
+        };
+    });
+
+    $("#terrainIndigene").click(function () {
+        if ($(this).hasClass("btn-warning")) {
+            $(this).removeClass("btn-warning");
+            $(this).addClass("btn-secondary");
+        } else {
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-warning");
+        };
     });
 });
