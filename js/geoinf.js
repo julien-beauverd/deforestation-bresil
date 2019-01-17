@@ -29,11 +29,20 @@ $(document).ready(function () {
         ]
     });
 
-    /*****************************************************************************
-     * carte du pays
+    /****************************************************************
+     * Fonction qui crée la coueh
+     * recoit en paramètre : 
+     * le titre de la couche
+     * la couleur de fond
+     * la couleur de la bordure
+     * l'épaisseur de la bordure
+     * l'opacité de la couche
+     * l'url du serveur où se situe la couche
+     * la requete
+     * le format
+     * l'apikey
      */
-
-    function creationCouche(title, fillColor, strokeColor, strokeWidth, url, requete, format, apiKey) {
+    function creationCouche(title, fillColor, strokeColor, strokeWidth, opacity, url, requete, format, apiKey) {
         var couche = new ol.layer.Vector({
             title: title,
             visible: false,
@@ -46,106 +55,23 @@ $(document).ready(function () {
                     width: strokeWidth
                 })
             }),
+            opacity: opacity,
             source: new ol.source.Vector({
                 url: url + "sql?q=" + requete + "&format=" + format + "&api_key=" + apiKey,
+
                 format: new ol.format.GeoJSON()
             })
         });
         map.addLayer(couche);
         return couche;
     }
-    var carteBresil = creationCouche("carte Brésil", "#c4c623", "#c4c623", 1, url, requeteCarteBresil, format, apiKey);
 
-    /*****************************************************************************
-     * carte des frontières maritimes
-     */
-    var frontiereMaritime = new ol.layer.Vector({
-        title: 'frontières maritimes',
-        visible: false,
-        style: new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: '#0800ff'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#0800ff',
-                width: 7
-            })
-        }),
-        source: new ol.source.Vector({
-            url: url + "sql?q=" + requeteFrontiereMaritime + "&format=" + format + "&api_key=" + apiKey,
-            format: new ol.format.GeoJSON()
-        })
-    });
-    map.addLayer(frontiereMaritime);
-
-
-    /*****************************************************************************
-     * carte des zones protégées
-     */
-    var zoneProtegee = new ol.layer.Vector({
-        title: 'zone protégée',
-        visible: false,
-        style: new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: '#28af03'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#28af03',
-                width: 1
-            })
-        }),
-        source: new ol.source.Vector({
-            url: url + "sql?q=" + requeteZoneProtegee + "&format=" + format + "&api_key=" + apiKey,
-            format: new ol.format.GeoJSON()
-        })
-    });
-    map.addLayer(zoneProtegee);
-
-    /*****************************************************************************
-     * carte des terrains classés indigènes
-     */
-    var terrainIndigene = new ol.layer.Vector({
-        title: 'terrains classés indigènes',
-        visible: false,
-        style: new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: '#e57309'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#e57309',
-                width: 1
-            })
-        }),
-        source: new ol.source.Vector({
-            url: url + "sql?q=" + requeteTerrainsClassesIndigenes + "&format=" + format + "&api_key=" + apiKey,
-            format: new ol.format.GeoJSON()
-        })
-    });
-    map.addLayer(terrainIndigene);
-
-    /*****************************************************************************
-     * carte des zones déforestées
-     */
-    var deforestation = new ol.layer.Vector({
-        title: 'deforestation',
-        visible: false,
-        style: new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: '#ce1414'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#ce1414',
-                width: 1
-            })
-        }),
-        source: new ol.source.Vector({
-            url: url + "sql?q=" + requeteDeforestation + "&format=" + format + "&api_key=" + apiKey,
-            format: new ol.format.GeoJSON()
-        })
-    });
-    map.addLayer(deforestation);
-
-
+    //création des différentes couches
+    var carteBresil = creationCouche("carte Brésil", "#c4c623", "#c4c623", 1, 0.3, url, requeteCarteBresil, format, apiKey);
+    var frontiereMaritime = creationCouche("frontières maritimes", "#0800ff", "#0800ff", 7, 0.7, url, requeteFrontiereMaritime, format, apiKey);
+    var zoneProtegee = creationCouche("zone protégée", "#28af03", "#28af03", 1, 1, url, requeteZoneProtegee, format, apiKey);
+    var terrainIndigene = creationCouche("terrains classés indigènes", "#e57309", "#e57309", 1, 1, url, requeteTerrainsClassesIndigenes, format, apiKey);
+    var deforestation = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation, format, apiKey);
 
     /*****************************************************************************
      * Interaction des différentes couches
@@ -164,7 +90,6 @@ $(document).ready(function () {
             $("#info").html(title);
         }
     });
-
 
     /******************************************************************************
      * switch permettant d'affichant les différentes cartes
