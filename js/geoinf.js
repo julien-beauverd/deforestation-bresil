@@ -53,7 +53,8 @@ $(document).ready(function () {
     map.addLayer(layerOSM);
 
     /****************************************************************
-     * Fonction qui crée la coueh
+     * Fonction qui crée la couche
+     * 
      * recoit en paramètre : 
      * le titre de la couche
      * la couleur de fond
@@ -94,11 +95,11 @@ $(document).ready(function () {
     var frontiereMaritime = creationCouche("frontières maritimes", "#0800ff", "#0800ff", 7, 0.7, url, requeteFrontiereMaritime, format, apiKey);
     var zoneProtegee = creationCouche("zone protégée", "#28af03", "#28af03", 1, 1, url, requeteZoneProtegee, format, apiKey);
     var terrainIndigene = creationCouche("terrains classés indigènes", "#e57309", "#e57309", 1, 1, url, requeteTerrainsClassesIndigenes, format, apiKey);
-    var deforestationTotale = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestationTotale, format, apiKey);
-    var deforestation71a76 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation71a76, format, apiKey);
-    var deforestation77a87 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation77a87, format, apiKey);
-    var deforestation88a91 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation88a91, format, apiKey);
-    var deforestation92a00 = creationCouche("déforestation", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation92a00, format, apiKey);
+    var deforestationTotale = creationCouche("déforestation totale", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestationTotale, format, apiKey);
+    var deforestation71a76 = creationCouche("déforestation de 1971 à 1976", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation71a76, format, apiKey);
+    var deforestation77a87 = creationCouche("déforestation de 1977 à 1987", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation77a87, format, apiKey);
+    var deforestation88a91 = creationCouche("déforestation de 1988 à 1991", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation88a91, format, apiKey);
+    var deforestation92a00 = creationCouche("déforestation de 1992 à 2000", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation92a00, format, apiKey);
     deforestationTotale.setVisible(true);
 
     /*****************************************************************************
@@ -114,6 +115,7 @@ $(document).ready(function () {
     selectInteraction.on('select', function (e) {
 
         if (typeof e.selected[0].get("area1") === 'undefined') {
+
             document.getElementById("coucheInterrogee").innerHTML = "Zone protégée";
             document.getElementById("aire").innerHTML = "aire de la zone : " + e.selected[0].get("gis_area") + " km<sup>2</sup>";
             document.getElementById("perimetre").innerHTML = "";
@@ -122,12 +124,12 @@ $(document).ready(function () {
 
         }
         else {
+
             document.getElementById("coucheInterrogee").innerHTML = "Zone déforestée";
             document.getElementById("aire").innerHTML = "aire de la zone : " + (e.selected[0].get("area1") / 1000000) + " km<sup>2</sup>";
             document.getElementById("perimetre").innerHTML = "périmètre de la zone : " + (e.selected[0].get("perimete2") / 1000) + " km";
             document.getElementById("name").innerHTML = "";
             document.getElementById("date").innerHTML = "Période de la déforestation : " + e.selected[0].get("data_lev8");
-
 
         }
     });
@@ -140,11 +142,11 @@ $(document).ready(function () {
     });
 
     $('#zoneDeforestee').click(function () {
-        if (deforestationTotale.getVisible() == true 
-        || deforestation71a76.getVisible() == true 
-        || deforestation77a87.getVisible() == true
-        || deforestation88a91.getVisible() == true
-        || deforestation92a00.getVisible() == true) {
+        if (deforestationTotale.getVisible() == true
+            || deforestation71a76.getVisible() == true
+            || deforestation77a87.getVisible() == true
+            || deforestation88a91.getVisible() == true
+            || deforestation92a00.getVisible() == true) {
             deforestationTotale.setVisible(false);
             deforestation71a76.setVisible(false);
             deforestation77a87.setVisible(false);
@@ -332,3 +334,33 @@ $(document).ready(function () {
         };
     });
 });
+
+function getFeatureInfo(lonlat) {
+
+
+    var sqlquery = "SELECT title, the_geom FROM cabanes4326_merge WHERE ST_Distance(the_geom, ST_GeomFromText('POINT(" + lonlat[0] + " " + lonlat[1] + ")', 4326)) < " + radius;
+    var sqlurl = "https://ogo.cartodb.com:443/api/v2/sql?format=GeoJSON&q=" + sqlquery;
+
+    var request = $.ajax({
+        url: sqlurl,
+        dataType: "json"
+    });
+
+    request.done(function (data) {
+        // we empty the message box
+        $("#info").html("");
+        
+        if (data.features.length > 0) {
+            // we just display the first hut in the array of features
+            var ft = data.features[0];
+            $("#info").append($("<p>").html(ft.properties.title));
+        } else {
+            // we display a default message in case of an empty array
+            $("#info").append($("<p>").html("No hut nearby, try elsewhere ..."));
+        }
+    });
+
+    request.fail(function (jqXHR, textStatus) {
+        alert("Request failed: " + textStatus);
+    });
+}
