@@ -6,11 +6,16 @@ var requeteDeforestationTotale = "select*from%20deforestation";
 var requeteDeforestation71a76 = "select*from%20deforestation%20where%20data_lev8='1971 a 1976'";
 var requeteDeforestation77a87 = "select*from%20deforestation%20where%20data_lev8='1977 a 1987'";
 var requeteDeforestation88a91 = "select*from%20deforestation%20where%20data_lev8='1988 a 1991'";
-var requeteDeforestation92a00 = "select*from%20deforestation%20where%20data_lev8%20is%20null";
+var requeteDeforestation92a94 = "select*from%20deforestation%20where%20data_lev8%20is%20null";
 var requeteZoneProtegee = "select*from%20bresil_zone_protegee";
 var requeteCarteBresil = "select*from%20carte_bresil";
 var requeteFrontiereMaritime = "select*from%20frontiere_maritime";
 var requeteTerrainsClassesIndigenes = "select*from%20terrain_classer_indigene";
+var requeteSommeDeforestationTotale = "select%20sum(area1_real)%20from%20deforestation";
+var requeteSommeDeforestationTotale71a76 = "select%20sum(area1_real)%20from%20deforestation%20where%20data_lev8='1971 a 1976'";
+var requeteSommeDeforestationTotale77a87 = "select%20sum(area1_real)%20from%20deforestation%20where%20data_lev8='1977 a 1987'";
+var requeteSommeDeforestationTotale88a91 = "select%20sum(area1_real)%20from%20deforestation%20where%20data_lev8='1988 a 1991'";
+var requeteSommeDeforestationTotale92a94 = "select%20sum(area1_real)%20from%20deforestation%20where%20data_lev8%20is%20null";
 var format = "geojson";
 var apiKey = "c9219f2fee613c8bf58a861a523d8493519f5f57";
 
@@ -99,15 +104,19 @@ $(document).ready(function () {
     var deforestation71a76 = creationCouche("déforestation de 1971 à 1976", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation71a76, format, apiKey);
     var deforestation77a87 = creationCouche("déforestation de 1977 à 1987", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation77a87, format, apiKey);
     var deforestation88a91 = creationCouche("déforestation de 1988 à 1991", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation88a91, format, apiKey);
-    var deforestation92a00 = creationCouche("déforestation de 1992 à 2000", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation92a00, format, apiKey);
+    var deforestation92a94 = creationCouche("déforestation de 1992 à 1994", "#ce1414", "#ce1414", 1, 1, url, requeteDeforestation92a94, format, apiKey);
     deforestationTotale.setVisible(true);
+
+    $.getJSON(url + "sql?q=" + requeteSommeDeforestationTotale, function (data) {
+        document.getElementById("totale").innerHTML = parseInt((data.rows[0].sum)/1000000) + " km<sup>2</sup>";
+    });
 
     /*****************************************************************************
      * Interaction des différentes couches
      */
     var selectInteraction = new ol.interaction.Select({
         condition: ol.events.condition.singleClick,
-        layers: [deforestationTotale, deforestation71a76, deforestation77a87, deforestation88a91, deforestation92a00, zoneProtegee]
+        layers: [deforestationTotale, deforestation71a76, deforestation77a87, deforestation88a91, deforestation92a94, zoneProtegee]
     });
 
     map.addInteraction(selectInteraction);
@@ -117,17 +126,17 @@ $(document).ready(function () {
         if (typeof e.selected[0].get("area1") === 'undefined') {
 
             document.getElementById("coucheInterrogee").innerHTML = "Zone protégée";
-            document.getElementById("aire").innerHTML = "aire de la zone : " + e.selected[0].get("gis_area") + " km<sup>2</sup>";
+            document.getElementById("aire").innerHTML = "Aire de la zone : " + parseInt(e.selected[0].get("gis_area")) + " km<sup>2</sup>";
             document.getElementById("perimetre").innerHTML = "";
             document.getElementById("date").innerHTML = "";
-            document.getElementById("name").innerHTML = "nom de la zone : " + e.selected[0].get("name");
+            document.getElementById("name").innerHTML = "Nom de la zone : " + e.selected[0].get("name");
 
         }
         else {
 
             document.getElementById("coucheInterrogee").innerHTML = "Zone déforestée";
-            document.getElementById("aire").innerHTML = "aire de la zone : " + (e.selected[0].get("area1") / 1000000) + " km<sup>2</sup>";
-            document.getElementById("perimetre").innerHTML = "périmètre de la zone : " + (e.selected[0].get("perimete2") / 1000) + " km";
+            document.getElementById("aire").innerHTML = "Aire de la zone : " + parseInt(e.selected[0].get("area1") / 1000000) + " km<sup>2</sup>";
+            document.getElementById("perimetre").innerHTML = "Périmètre de la zone : " + parseInt(e.selected[0].get("perimete2") / 1000) + " km";
             document.getElementById("name").innerHTML = "";
             document.getElementById("date").innerHTML = "Période de la déforestation : " + e.selected[0].get("data_lev8");
 
@@ -146,19 +155,19 @@ $(document).ready(function () {
             || deforestation71a76.getVisible() == true
             || deforestation77a87.getVisible() == true
             || deforestation88a91.getVisible() == true
-            || deforestation92a00.getVisible() == true) {
+            || deforestation92a94.getVisible() == true) {
             deforestationTotale.setVisible(false);
             deforestation71a76.setVisible(false);
             deforestation77a87.setVisible(false);
             deforestation88a91.setVisible(false);
-            deforestation92a00.setVisible(false);
+            deforestation92a94.setVisible(false);
         }
         else {
             deforestationTotale.setVisible(true);
             deforestation71a76.setVisible(true);
             deforestation77a87.setVisible(true);
             deforestation88a91.setVisible(true);
-            deforestation92a00.setVisible(true);
+            deforestation92a94.setVisible(true);
         }
 
     });
@@ -206,7 +215,7 @@ $(document).ready(function () {
             output.innerHTML = "de 1988 à 1991";
             break;
         case "4":
-            output.innerHTML = "de 1992 à 2000";
+            output.innerHTML = "de 1992 à 1994";
             break;
         default:
             output.innerHTML = "";
@@ -222,9 +231,12 @@ $(document).ready(function () {
                 deforestation71a76.setVisible(true);
                 deforestation77a87.setVisible(false);
                 deforestation88a91.setVisible(false);
-                deforestation92a00.setVisible(false);
+                deforestation92a94.setVisible(false);
                 $("#zoneDeforestee").removeClass("btn-secondary");
                 $("#zoneDeforestee").addClass("btn-danger");
+                $.getJSON(url + "sql?q=" + requeteSommeDeforestationTotale71a76, function (data) {
+                    document.getElementById("totale").innerHTML = parseInt((data.rows[0].sum)/1000000) + " km<sup>2</sup>";
+                });
                 break;
             case "2":
                 annee = "de 1977 à 1987";
@@ -232,9 +244,12 @@ $(document).ready(function () {
                 deforestation71a76.setVisible(false);
                 deforestation77a87.setVisible(true);
                 deforestation88a91.setVisible(false);
-                deforestation92a00.setVisible(false);
+                deforestation92a94.setVisible(false);
                 $("#zoneDeforestee").removeClass("btn-secondary");
                 $("#zoneDeforestee").addClass("btn-danger");
+                $.getJSON(url + "sql?q=" + requeteSommeDeforestationTotale77a87, function (data) {
+                    document.getElementById("totale").innerHTML = parseInt((data.rows[0].sum)/1000000) + " km<sup>2</sup>";
+                });
                 break;
             case "3":
                 annee = "de 1988 à 1991";
@@ -242,19 +257,25 @@ $(document).ready(function () {
                 deforestation71a76.setVisible(false);
                 deforestation77a87.setVisible(false);
                 deforestation88a91.setVisible(true);
-                deforestation92a00.setVisible(false);
+                deforestation92a94.setVisible(false);
                 $("#zoneDeforestee").removeClass("btn-secondary");
                 $("#zoneDeforestee").addClass("btn-danger");
+                $.getJSON(url + "sql?q=" + requeteSommeDeforestationTotale88a91, function (data) {
+                    document.getElementById("totale").innerHTML = parseInt((data.rows[0].sum)/1000000) + " km<sup>2</sup>";
+                });
                 break;
             case "4":
-                annee = "de 1992 à 2000";
+                annee = "de 1992 à 1994";
                 deforestationTotale.setVisible(false);
                 deforestation71a76.setVisible(false);
                 deforestation77a87.setVisible(false);
                 deforestation88a91.setVisible(false);
-                deforestation92a00.setVisible(true);
+                deforestation92a94.setVisible(true);
                 $("#zoneDeforestee").removeClass("btn-secondary");
                 $("#zoneDeforestee").addClass("btn-danger");
+                $.getJSON(url + "sql?q=" + requeteSommeDeforestationTotale92a94, function (data) {
+                    document.getElementById("totale").innerHTML = parseInt((data.rows[0].sum)/1000000) + " km<sup>2</sup>";
+                });
                 break;
             default:
                 annee = "";
@@ -262,9 +283,12 @@ $(document).ready(function () {
                 deforestation71a76.setVisible(false);
                 deforestation77a87.setVisible(false);
                 deforestation88a91.setVisible(false);
-                deforestation92a00.setVisible(false);
+                deforestation92a94.setVisible(false);
                 $("#zoneDeforestee").removeClass("btn-secondary");
                 $("#zoneDeforestee").addClass("btn-danger");
+                $.getJSON(url + "sql?q=" + requeteSommeDeforestationTotale, function (data) {
+                    document.getElementById("totale").innerHTML = parseInt((data.rows[0].sum)/1000000) + " km<sup>2</sup>";
+                });
         }
         output.innerHTML = annee;
     }
@@ -334,33 +358,3 @@ $(document).ready(function () {
         };
     });
 });
-
-function getFeatureInfo(lonlat) {
-
-
-    var sqlquery = "SELECT title, the_geom FROM cabanes4326_merge WHERE ST_Distance(the_geom, ST_GeomFromText('POINT(" + lonlat[0] + " " + lonlat[1] + ")', 4326)) < " + radius;
-    var sqlurl = "https://ogo.cartodb.com:443/api/v2/sql?format=GeoJSON&q=" + sqlquery;
-
-    var request = $.ajax({
-        url: sqlurl,
-        dataType: "json"
-    });
-
-    request.done(function (data) {
-        // we empty the message box
-        $("#info").html("");
-        
-        if (data.features.length > 0) {
-            // we just display the first hut in the array of features
-            var ft = data.features[0];
-            $("#info").append($("<p>").html(ft.properties.title));
-        } else {
-            // we display a default message in case of an empty array
-            $("#info").append($("<p>").html("No hut nearby, try elsewhere ..."));
-        }
-    });
-
-    request.fail(function (jqXHR, textStatus) {
-        alert("Request failed: " + textStatus);
-    });
-}
