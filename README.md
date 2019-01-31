@@ -24,11 +24,9 @@ Les données sont situées ici :
 ## Application
 Les couches de références sont OpenStreetMap et BingsMap.
 Les couches d'intéraction sont les couches des zones protégées et les zones déforestées.
-Les données sont hébergées sur [www.carto.ch](http://www.carto.ch "www.carto.ch")
-
+Les données sont hébergées sur [www.carto.com](https://carto.com/ "www.carto.com")
 
 ![screenshot de l'application](./img/application.png "screenshot de l'application")
 
 ## Schéma d'architecture
-
-
+![screenshot de l'architecture de l'application](./img/architecture.png "screenshot de l'architecture de l'application")
