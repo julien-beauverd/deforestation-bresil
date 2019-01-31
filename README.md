@@ -29,4 +29,5 @@ Les données sont hébergées sur [www.carto.com](https://carto.com/ "www.carto.
 ![screenshot de l'application](./img/application.png "screenshot de l'application")
 
 ## Schéma d'architecture
+présentation du fonctionnement de l'application
 ![screenshot de l'architecture de l'application](./img/architecture.png "screenshot de l'architecture de l'application")
