@@ -27,7 +27,7 @@ Les couches d'intéraction sont les couches des zones protégées et les zones d
 Les données sont hébergées sur [www.carto.ch](http://www.carto.ch "www.carto.ch")
 
 
-![screenshot de l'application](../img/application.png "screenshot de l'application")
+![screenshot de l'application](./img/application.png "screenshot de l'application")
 
 ## Schéma d'architecture
 
